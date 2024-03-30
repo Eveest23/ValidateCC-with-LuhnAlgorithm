@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Credit Card Validator</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+    }
+    input[type="text"] {
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+    button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+    <h1>Credit Card Validator</h1>
+    <input type="text" id="cardNumber" placeholder="Enter Credit Card Number">
+    <button onclick="validateCard()">Validate</button>
+    <p id="result"></p>
+
+    <script>
+        function validateCard() {
+            var cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+            
+            if (!/^\d+$/.test(cardNumber)) {
+                document.getElementById('result').innerText = "Invalid input! Please enter digits only.";
+                return;
+            }
+
+            if (luhnCheck(cardNumber)) {
+                document.getElementById('result').innerText = "Valid Credit Card Number!";
+            } else {
+                document.getElementById('result').innerText = "Invalid Credit Card Number!";
+            }
+        }
+
+        function luhnCheck(cardNumber) {
+            var sum = 0;
+            var doubleUp = false;
+            for (var i = cardNumber.length - 1; i >= 0; i--) {
+                var curDigit = parseInt(cardNumber.charAt(i));
+                if (doubleUp) {
+                    if ((curDigit * 2) > 9) {
+                        sum += (curDigit * 2) - 9;
+                    } else {
+                        sum += curDigit * 2;
+                    }
+                } else {
+                    sum += curDigit;
+                }
+                doubleUp = !doubleUp;
+            }
+            return (sum % 10) == 0;
+        }
+    </script>
+</body>
+</html>
